@@ -382,7 +382,7 @@ document.addEventListener('click', (e) => {
   }
 }, true);
 
-function showPage(id) {
+function showPage(id, pushHistory = true) {
   document.querySelectorAll('.page, .section-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
   document.querySelectorAll('.mobile-nav-drawer a').forEach(a => a.classList.remove('active'));
@@ -415,7 +415,35 @@ function showPage(id) {
   if (id === 'skills') {
     setTimeout(animSkills, 400);
   }
+
+  // Push a history entry so the browser back button navigates between sections
+  if (pushHistory) {
+    const currentState = history.state;
+    if (!currentState || currentState.section !== id) {
+      history.pushState({ section: id }, '', '#' + id);
+    }
+  }
 }
+
+// Handle browser back/forward button — restore the correct section
+window.addEventListener('popstate', (e) => {
+  if (e.state && e.state.section) {
+    showPage(e.state.section, false);
+  } else {
+    // No state means we've gone back to the very start — show home
+    showPage('home', false);
+  }
+});
+
+// On first load, set an initial history entry so back button has somewhere to go
+(function initHistory() {
+  const hash = window.location.hash.replace('#', '');
+  const validPages = ['home', 'about', 'education', 'projects', 'skills', 'contact'];
+  const startPage = validPages.includes(hash) ? hash : 'home';
+  // Replace current entry (no extra back step on load)
+  history.replaceState({ section: startPage }, '', '#' + startPage);
+  if (startPage !== 'home') showPage(startPage, false);
+})();
 
 function animSkills() {
   document.querySelectorAll('.skill-fill').forEach(bar => {
