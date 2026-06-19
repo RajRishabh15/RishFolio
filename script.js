@@ -1,5 +1,4 @@
 // ===== PROJECT MODAL LOGIC =====
-emailjs.init('YOUR_USER_ID');
 const projectsData = {
   'french-tech': {
     title: 'France & Technology',
@@ -423,13 +422,16 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' && idx > 0) showPage(pages[idx - 1]);
 });
 
-function sendContactMessage(event) {
+function handleFormSubmit(event) {
   event.preventDefault();
+
+  const form = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submit-btn');
+  const status = document.getElementById('contact-status');
 
   const name = document.getElementById('contact-name').value.trim();
   const email = document.getElementById('contact-email').value.trim();
   const message = document.getElementById('contact-message').value.trim();
-  const status = document.getElementById('contact-status');
 
   if (!name || !email || !message) {
     status.textContent = 'Please fill in all fields before sending.';
@@ -437,19 +439,37 @@ function sendContactMessage(event) {
   }
 
   status.textContent = 'Sending message...';
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
 
-  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-    from_name: name,
-    from_email: email,
-    message: message,
+  // Submit form via fetch
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: {
+      'Accept': 'application/json'
+    }
   })
-    .then(() => {
-      status.textContent = 'Message sent successfully! I will get back to you soon.';
-      document.getElementById('contactForm').reset();
+    .then(response => {
+      if (response.ok) {
+        status.textContent = '✓ Message sent successfully! I will get back to you soon.';
+        form.reset();
+        submitBtn.textContent = 'Send Message ✦';
+        setTimeout(() => {
+          status.textContent = '';
+          submitBtn.disabled = false;
+        }, 3000);
+      } else {
+        status.textContent = 'Oops! Something went wrong. Please try again.';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message ✦';
+      }
     })
-    .catch((error) => {
-      console.error('EmailJS error:', error);
-      status.textContent = 'Oops! Something went wrong. Please try again later.';
+    .catch(error => {
+      console.error('Form submission error:', error);
+      status.textContent = 'Network error. Please check your connection and try again.';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message ✦';
     });
 
   return false;
