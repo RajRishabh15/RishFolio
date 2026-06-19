@@ -1,4 +1,5 @@
 // ===== PROJECT MODAL LOGIC =====
+emailjs.init('YOUR_USER_ID');
 const projectsData = {
   'french-tech': {
     title: 'France & Technology',
@@ -421,6 +422,38 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' && idx < pages.length - 1) showPage(pages[idx + 1]);
   if (e.key === 'ArrowLeft' && idx > 0) showPage(pages[idx - 1]);
 });
+
+function sendContactMessage(event) {
+  event.preventDefault();
+
+  const name = document.getElementById('contact-name').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const message = document.getElementById('contact-message').value.trim();
+  const status = document.getElementById('contact-status');
+
+  if (!name || !email || !message) {
+    status.textContent = 'Please fill in all fields before sending.';
+    return false;
+  }
+
+  status.textContent = 'Sending message...';
+
+  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+    from_name: name,
+    from_email: email,
+    message: message,
+  })
+    .then(() => {
+      status.textContent = 'Message sent successfully! I will get back to you soon.';
+      document.getElementById('contactForm').reset();
+    })
+    .catch((error) => {
+      console.error('EmailJS error:', error);
+      status.textContent = 'Oops! Something went wrong. Please try again later.';
+    });
+
+  return false;
+}
 
 window.addEventListener('load', () => {
   setTimeout(() => {
