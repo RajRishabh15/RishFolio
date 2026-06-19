@@ -404,15 +404,12 @@ function showPage(id) {
   const mNavLink = document.getElementById('mnav-' + id);
   if (mNavLink) mNavLink.classList.add('active');
 
-  // Toggle back button for education page
-  const backBtn = document.getElementById('backBtn');
-  const hamburger = document.getElementById('hamburger');
+  // Toggle education page navigation mode
+  const nav = document.querySelector('nav');
   if (id === 'education') {
-    backBtn.style.display = 'block';
-    hamburger.style.display = 'none';
+    nav.classList.add('education-mode');
   } else {
-    backBtn.style.display = 'none';
-    hamburger.style.display = 'flex';
+    nav.classList.remove('education-mode');
   }
 
   if (id === 'skills') {
