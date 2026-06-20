@@ -118,6 +118,18 @@ document.querySelectorAll(hoverTargets).forEach(el => {
   });
 });
 
+const textTargets = '.form-input, .form-textarea';
+document.querySelectorAll(textTargets).forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.classList.add('cursor--text');
+    ring.classList.add('cursor--text');
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.classList.remove('cursor--text');
+    ring.classList.remove('cursor--text');
+  });
+});
+
 document.addEventListener('mouseleave', () => {
   cursor.style.opacity = '0';
   ring.style.opacity = '0';
