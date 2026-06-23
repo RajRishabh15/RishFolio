@@ -457,13 +457,32 @@ document.addEventListener('click', (e) => {
 }, true);
 
 function showPage(id, pushHistory = true) {
-  document.querySelectorAll('.page, .section-page').forEach(p => p.classList.remove('active'));
+  const activePageEl = document.querySelector('.page.active, .section-page.active');
+  const oldId = activePageEl ? activePageEl.id : null;
+  const pagesList = ['home', 'about', 'education', 'projects', 'skills', 'contact'];
+  const oldIdx = pagesList.indexOf(oldId);
+  const newIdx = pagesList.indexOf(id);
+
+  document.querySelectorAll('.page, .section-page').forEach(p => {
+    p.classList.remove('active', 'swipe-right-bounce-flash', 'swipe-left-bounce-flash');
+  });
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
   document.querySelectorAll('.mobile-nav-drawer a').forEach(a => a.classList.remove('active'));
 
   const page = document.getElementById(id);
   if (page) {
     page.classList.add('active');
+    
+    // Apply swipe animations if on desktop
+    const isDesktop = window.innerWidth >= 768;
+    if (isDesktop && oldIdx !== -1 && newIdx !== -1 && oldIdx !== newIdx) {
+      if (newIdx > oldIdx) {
+        page.classList.add('swipe-right-bounce-flash');
+      } else {
+        page.classList.add('swipe-left-bounce-flash');
+      }
+    }
+
     page.querySelectorAll('.section-header, .about-grid, .projects-grid, .skills-layout, .contact-layout').forEach(el => {
       el.style.animation = 'none';
       el.offsetHeight;
