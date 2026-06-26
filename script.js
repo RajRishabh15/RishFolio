@@ -247,15 +247,13 @@ let mx = 0, my = 0, rx = 0, ry = 0;
 document.addEventListener('mousemove', e => {
   mx = e.clientX;
   my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
+  cursor.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%, -50%)`;
 });
 
 function animRing() {
-  rx += (mx - rx) * 0.25;
-  ry += (my - ry) * 0.25;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
+  rx += (mx - rx) * 0.15;
+  ry += (my - ry) * 0.15;
+  ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
   requestAnimationFrame(animRing);
 }
 animRing();
@@ -294,10 +292,12 @@ document.addEventListener('mouseenter', () => {
 });
 
 document.addEventListener('mousedown', () => {
-  cursor.style.transform = 'translate(-50%, -50%) scale(0.75)';
+  const cursorR = cursor.querySelector('.cursor-r');
+  if (cursorR) cursorR.style.transform = 'scale(0.75)';
 });
 document.addEventListener('mouseup', () => {
-  cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+  const cursorR = cursor.querySelector('.cursor-r');
+  if (cursorR) cursorR.style.transform = '';
 });
 
 const canvas = document.getElementById('starCanvas');
@@ -549,14 +549,8 @@ document.addEventListener('click', (e) => {
 }, true);
 
 function showPage(id, pushHistory = true) {
-  const activePageEl = document.querySelector('.page.active, .section-page.active');
-  const oldId = activePageEl ? activePageEl.id : null;
-  const pagesList = ['home', 'about', 'education', 'projects', 'skills', 'contact'];
-  const oldIdx = pagesList.indexOf(oldId);
-  const newIdx = pagesList.indexOf(id);
-
   document.querySelectorAll('.page, .section-page').forEach(p => {
-    p.classList.remove('active', 'swipe-right-bounce-flash', 'swipe-left-bounce-flash');
+    p.classList.remove('active');
   });
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
   document.querySelectorAll('.mobile-nav-drawer a').forEach(a => a.classList.remove('active'));
@@ -564,20 +558,10 @@ function showPage(id, pushHistory = true) {
   const page = document.getElementById(id);
   if (page) {
     page.classList.add('active');
-    
-    // Apply swipe animations if on desktop
-    const isDesktop = window.innerWidth >= 768;
-    if (isDesktop && oldIdx !== -1 && newIdx !== -1 && oldIdx !== newIdx) {
-      if (newIdx > oldIdx) {
-        page.classList.add('swipe-right-bounce-flash');
-      } else {
-        page.classList.add('swipe-left-bounce-flash');
-      }
-    }
 
-    page.querySelectorAll('.section-header, .about-grid, .projects-grid, .skills-layout, .contact-layout').forEach(el => {
+    page.querySelectorAll('.section-header, .about-grid, .projects-grid, .skills-layout, .contact-layout, .education-container').forEach(el => {
       el.style.animation = 'none';
-      el.offsetHeight;
+      void el.offsetHeight;
       el.style.animation = '';
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
