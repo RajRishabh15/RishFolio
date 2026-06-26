@@ -559,7 +559,7 @@ function showPage(id, pushHistory = true) {
   if (page) {
     page.classList.add('active');
 
-    page.querySelectorAll('.section-header, .about-grid, .projects-grid, .skills-layout, .contact-layout, .education-container').forEach(el => {
+    page.querySelectorAll('.section-header, .about-grid, .projects-grid, .skills-grid, .contact-layout, .education-container').forEach(el => {
       el.style.animation = 'none';
       void el.offsetHeight;
       el.style.animation = '';
