@@ -921,76 +921,22 @@ nav {
   opacity: 1;
 }
 
-/* Frontend: Rose/Lavender Glow */
-.skills-card.frontend::before {
+/* Unified Glassmorphic Hover Styles */
+.skills-card::before {
   background-image: linear-gradient(rgba(26, 16, 40, 0.55), rgba(26, 16, 40, 0.55)), 
-                    linear-gradient(135deg, var(--lavender), var(--rose));
-}
-.skills-card.frontend::after {
-  box-shadow: 0 20px 50px rgba(244, 167, 185, 0.18);
-}
-.skills-card.frontend:hover .skills-card-title {
-  background: linear-gradient(135deg, var(--lavender), var(--rose));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.skills-card.frontend .skills-card-icon {
-  filter: drop-shadow(0 4px 12px rgba(244, 167, 185, 0.3));
+                    linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
 }
 
-/* Backend: Sky/Mint Glow */
-.skills-card.backend::before {
-  background-image: linear-gradient(rgba(26, 16, 40, 0.55), rgba(26, 16, 40, 0.55)), 
-                    linear-gradient(135deg, var(--sky), var(--mint));
-}
-.skills-card.backend::after {
-  box-shadow: 0 20px 50px rgba(168, 216, 240, 0.18);
-}
-.skills-card.backend:hover .skills-card-title {
-  background: linear-gradient(135deg, var(--sky), var(--mint));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.skills-card.backend .skills-card-icon {
-  filter: drop-shadow(0 4px 12px rgba(168, 216, 240, 0.3));
+.skills-card::after {
+  box-shadow: 0 20px 50px rgba(255, 255, 255, 0.05), 0 0 30px rgba(201, 184, 240, 0.08);
 }
 
-/* Tools: Peach/Gold Glow */
-.skills-card.tools::before {
-  background-image: linear-gradient(rgba(26, 16, 40, 0.55), rgba(26, 16, 40, 0.55)), 
-                    linear-gradient(135deg, var(--peach), var(--gold));
-}
-.skills-card.tools::after {
-  box-shadow: 0 20px 50px rgba(255, 224, 163, 0.18);
-}
-.skills-card.tools:hover .skills-card-title {
-  background: linear-gradient(135deg, var(--peach), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.skills-card.tools .skills-card-icon {
-  filter: drop-shadow(0 4px 12px rgba(255, 224, 163, 0.3));
+.skills-card:hover .skills-card-title {
+  color: var(--text);
 }
 
-/* Academics: Mint/Lavender Glow */
-.skills-card.academics::before {
-  background-image: linear-gradient(rgba(26, 16, 40, 0.55), rgba(26, 16, 40, 0.55)), 
-                    linear-gradient(135deg, var(--mint), var(--lavender));
-}
-.skills-card.academics::after {
-  box-shadow: 0 20px 50px rgba(168, 230, 207, 0.18);
-}
-.skills-card.academics:hover .skills-card-title {
-  background: linear-gradient(135deg, var(--mint), var(--lavender));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.skills-card.academics .skills-card-icon {
-  filter: drop-shadow(0 4px 12px rgba(168, 230, 207, 0.3));
+.skills-card:hover .skills-card-icon {
+  filter: drop-shadow(0 4px 12px rgba(201, 184, 240, 0.25));
 }
 
 .skills-card-icon {
