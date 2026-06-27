@@ -30,6 +30,17 @@ const projectsData = {
     live: 'https://github.com/OpticRish/To-Do-List-CLI-',
     github: 'https://github.com/OpticRish/To-Do-List-CLI-'
   },
+  'subscription-manager': {
+    title: 'Subscription Manager',
+    tag: 'Full Stack',
+    category: 'fullstack',
+    desc: 'An upcoming subscription management tool designed to track recurring payments, set renewal alerts, analyze monthly spending, and optimize overall subscription expenses.',
+    stack: ['React', 'Node.js', 'MongoDB', 'Express'],
+    img: 'https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?q=80&w=2070&auto=format&fit=crop',
+    live: '#',
+    github: '#',
+    upcoming: true
+  },
   'tech-event': {
     title: 'Tech Event Web',
     tag: 'Frontend',
@@ -47,11 +58,30 @@ function openProjectModal(projectId) {
   if (!data) return;
 
   document.getElementById('modal-title').textContent = data.title;
-  document.getElementById('modal-tag').textContent = data.tag;
+  document.getElementById('modal-tag').textContent = data.upcoming ? data.tag + ' (Upcoming)' : data.tag;
   document.getElementById('modal-desc').textContent = data.desc;
   document.getElementById('modal-img').src = data.img;
-  document.getElementById('modal-live-link').href = data.live;
-  document.getElementById('modal-github').href = data.github;
+
+  const liveLink = document.getElementById('modal-live-link');
+  const githubLink = document.getElementById('modal-github');
+
+  if (data.upcoming) {
+    liveLink.href = '#';
+    liveLink.innerHTML = '<span>Coming Soon</span> ✦';
+    liveLink.className = 'px-6 py-3 bg-white/5 border border-white/10 text-white/40 rounded-full text-sm font-semibold pointer-events-none flex items-center gap-2';
+    
+    githubLink.href = '#';
+    githubLink.innerHTML = '<span>Coming Soon</span> <span class="text-lg">⌘</span>';
+    githubLink.className = 'px-6 py-3 border border-white/10 text-white/40 rounded-full text-sm pointer-events-none flex items-center gap-2';
+  } else {
+    liveLink.href = data.live;
+    liveLink.innerHTML = '<span>Visit Live Site</span> ↗';
+    liveLink.className = 'px-6 py-3 bg-lavender text-deep rounded-full text-sm font-semibold hover:bg-rose transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(201,184,240,0.3)] hover:scale-105';
+    
+    githubLink.href = data.github;
+    githubLink.innerHTML = '<span>GitHub Repo</span> <span class="text-lg">⌘</span>';
+    githubLink.className = 'px-6 py-3 border border-lavender/30 rounded-full text-sm text-textPrimary hover:border-lavender hover:bg-lavender/10 transition-all flex items-center gap-2 hover:scale-105';
+  }
 
   const stackContainer = document.getElementById('modal-stack');
   stackContainer.innerHTML = '';
