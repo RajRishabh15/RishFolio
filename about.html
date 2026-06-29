@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>html,body{background:#1a1028;color:#f0eaf8;}</style>
-  <title>Rishabh's Portfolio</title>
+  <title>About - Rishabh's Portfolio</title>
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23c9b8f0'/><stop offset='100%25' stop-color='%23f4a7b9'/></linearGradient></defs><rect width='100' height='100' rx='32' fill='url(%23g)'/><text x='50' y='68' font-family='Cormorant Garamond, Georgia, serif' font-size='52' font-weight='700' font-style='italic' fill='%231a1028' text-anchor='middle'>RR</text></svg>">
   <link
@@ -52,8 +52,8 @@
       <div class="nav-logo-icon">RR</div>
     </div>
     <ul class="nav-links">
-      <li><a href="index.html" class="active" id="nav-home">Home</a></li>
-      <li><a href="about.html" id="nav-about">About</a></li>
+      <li><a href="index.html" id="nav-home">Home</a></li>
+      <li><a href="about.html" class="active" id="nav-about">About</a></li>
       <li><a href="projects.html" id="nav-projects">Projects</a></li>
       <li><a href="skills.html" id="nav-skills">Skills</a></li>
       <li><a href="contact.html" id="nav-contact">Contact</a></li>
@@ -68,30 +68,56 @@
 
   <!-- Mobile Nav Drawer -->
   <div class="mobile-nav-drawer" id="mobileNav">
-    <a href="index.html" class="active" id="mnav-home">Home</a>
-    <a href="about.html" id="mnav-about">About</a>
+    <a href="index.html" id="mnav-home">Home</a>
+    <a href="about.html" class="active" id="mnav-about">About</a>
     <a href="projects.html" id="mnav-projects">Projects</a>
     <a href="skills.html" id="mnav-skills">Skills</a>
     <a href="contact.html" id="mnav-contact">Contact</a>
   </div>
 
-  <!-- ===== HOME ===== -->
-  <div class="page active" id="home">
-    <div class="hero-eyebrow">Available for opportunities ✦</div>
-    <h1 class="hero-name">Hello, I'm <span>Rishabh Raj</span></h1>
-    <p class="hero-title">Student Developer & Digital Dreamer</p>
-    <p class="hero-desc">I craft thoughtful digital experiences where beautiful design meets clean code. Currently
-      exploring the intersection of creativity and technology.</p>
-    <div class="hero-cta">
-      <a class="btn-primary" href="projects.html">View My Work</a>
-      <a class="btn-outline" href="contact.html">Say Hello</a>
+  <!-- ===== ABOUT ===== -->
+  <div class="section-page active" id="about">
+    <div class="section-header">
+      <p class="section-eyebrow">Who I am</p>
+      <h2 class="section-title">A little bit <em>about me</em></h2>
     </div>
-    <div class="scroll-indicator">
-      <div class="scroll-line"></div>
-      <span class="btn-abt" onclick="window.location.href='about.html';">Explore</span>
+    <div class="about-grid">
+      <div class="about-left">
+        <div class="about-avatar">
+          <div class="avatar-ring"></div>
+          <div class="avatar-initials">RR</div>
+        </div>
+        <div class="about-info">
+          <p>🎓 Computer Science Student</p>
+          <p>🌐 Technical Associate(Web Dev) at Coding Ninjas 10X SRM</p>
+          <p>💻 Full-Stack Enthusiast</p>
+          <p>📍 Chennai</p>
+        </div>
+      </div>
+      <div class="about-right">
+        <p class="about-bio">"I believe great software should feel effortless — the kind that makes you smile the moment
+          you use it."</p>
+        <p class="about-body">I'm a passionate student developer currently pursuing my B.Tech degree in Computer Science
+          Engineering (Specialisation in Software Engineering) from SRMIST Kattankulathur,Chennai. I
+          love building projects that blend aesthetic design with functional code — whether that's a sleek web app, an
+          interactive dashboard, or a creative experiment.</p>
+        <p class="about-body">When I'm not debugging at 2am, you'll find me sketching UI concepts, exploring new
+          frameworks, or getting lost in a good playlist. I'm always looking for the next interesting problem to solve.
+        </p>
+        <div class="about-tags">
+          <div class="tag">Open Source</div>
+          <div class="tag">Web Dev</div>
+          <div class="tag">Design Thinking</div>
+          <div class="tag">Problem Solving</div>
+          <div class="tag">Hackathons</div>
+          <div class="tag">Coffee ☕</div>
+        </div>
+        <button class="btn-primary" style="margin-top:2rem;" onclick="window.location.href='education.html'; closeMobileNav();">View
+          Education Details →</button>
+      </div>
     </div>
-    <div class="copyright" style="position: absolute; bottom: 20px; width: 100%;">&copy; 2026 Rishabh Raj.<br>All rights
-      reserved.</div>
+    <div class="footer-line">✦ &nbsp; Always learning &nbsp; ✦</div>
+    <div class="copyright">&copy; 2026 Rishabh Raj.<br>All rights reserved.</div>
   </div>
 
   <script src="script.js"></script>

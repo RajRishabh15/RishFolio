@@ -595,71 +595,84 @@ document.addEventListener('click', (e) => {
   }
 }, true);
 
-function showPage(id, pushHistory = true) {
-  document.querySelectorAll('.page, .section-page').forEach(p => {
-    p.classList.remove('active');
-  });
-  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-  document.querySelectorAll('.mobile-nav-drawer a').forEach(a => a.classList.remove('active'));
+// Ordered page sequence for direction calculation
+const PAGE_ORDER = ['index.html', 'about.html', 'projects.html', 'credentials.html', 'education.html', 'skills.html', 'contact.html'];
 
-  const page = document.getElementById(id);
-  if (page) {
-    page.classList.add('active');
+function getCurrentPage() {
+  return window.location.pathname.split('/').pop() || 'index.html';
+}
 
-    page.querySelectorAll('.section-header, .about-grid, .projects-grid, .skills-grid, .skills-card, .contact-layout, .education-container').forEach(el => {
-      el.style.animation = 'none';
-      void el.offsetHeight;
-      el.style.animation = '';
-    });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  const navLink = document.getElementById('nav-' + id);
-  if (navLink) navLink.classList.add('active');
-
-  const mNavLink = document.getElementById('mnav-' + id);
-  if (mNavLink) mNavLink.classList.add('active');
-
-  // Toggle education page navigation mode
-  const nav = document.querySelector('nav');
-  if (id === 'education') {
-    nav.classList.add('education-mode');
+function navigateTo(targetFile) {
+  const currentFile = getCurrentPage();
+  const fromIdx = PAGE_ORDER.indexOf(currentFile);
+  const toIdx = PAGE_ORDER.indexOf(targetFile);
+  if (fromIdx !== -1 && toIdx !== -1) {
+    sessionStorage.setItem('swipeDirection', toIdx > fromIdx ? 'left' : 'right');
   } else {
-    nav.classList.remove('education-mode');
+    sessionStorage.setItem('swipeDirection', 'left');
   }
+  window.location.href = targetFile;
+}
 
-  if (id === 'skills') {
-    setTimeout(animSkills, 400);
+function showPage(id) {
+  const pageMap = {
+    'home': 'index.html',
+    'about': 'about.html',
+    'education': 'education.html',
+    'projects': 'projects.html',
+    'credentials': 'credentials.html',
+    'skills': 'skills.html',
+    'contact': 'contact.html'
+  };
+  const targetPage = pageMap[id];
+  if (targetPage) {
+    navigateTo(targetPage);
   }
+}
 
-  // Push a history entry so the browser back button navigates between sections
-  if (pushHistory) {
-    const currentState = history.state;
-    if (!currentState || currentState.section !== id) {
-      history.pushState({ section: id }, '', '#' + id);
+// On page load: apply swipe animation and init active nav link
+function initActiveNavLink() {
+  const activePage = document.querySelector('.page.active, .section-page.active');
+  if (activePage) {
+    const id = activePage.id;
+    // Highlight desktop nav
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const navLink = document.getElementById('nav-' + id);
+    if (navLink) navLink.classList.add('active');
+
+    // Highlight mobile nav
+    document.querySelectorAll('.mobile-nav-drawer a').forEach(a => a.classList.remove('active'));
+    const mNavLink = document.getElementById('mnav-' + id);
+    if (mNavLink) mNavLink.classList.add('active');
+
+    // Apply swipe animation from sessionStorage direction
+    const direction = sessionStorage.getItem('swipeDirection');
+    if (direction === 'left') {
+      activePage.classList.add('swipe-left-anim');
+    } else if (direction === 'right') {
+      activePage.classList.add('swipe-right-anim');
+    }
+    // Clear direction after use
+    sessionStorage.removeItem('swipeDirection');
+
+    // Run skills animation if on skills page
+    if (id === 'skills') {
+      setTimeout(animSkills, 400);
     }
   }
 }
 
-// Handle browser back/forward button — restore the correct section
-window.addEventListener('popstate', (e) => {
-  if (e.state && e.state.section) {
-    showPage(e.state.section, false);
-  } else {
-    // No state means we've gone back to the very start — show home
-    showPage('home', false);
+// Intercept internal link clicks to apply direction tracking
+document.addEventListener('click', e => {
+  const anchor = e.target.closest('a[href]');
+  if (!anchor) return;
+  const href = anchor.getAttribute('href');
+  // Only intercept local .html links
+  if (href && href.endsWith('.html') && !href.startsWith('http') && !href.startsWith('//')) {
+    e.preventDefault();
+    navigateTo(href);
   }
-});
-
-// On first load, set an initial history entry so back button has somewhere to go
-(function initHistory() {
-  const hash = window.location.hash.replace('#', '');
-  const validPages = ['home', 'about', 'education', 'projects', 'skills', 'contact'];
-  const startPage = validPages.includes(hash) ? hash : 'home';
-  // Replace current entry (no extra back step on load)
-  history.replaceState({ section: startPage }, '', '#' + startPage);
-  if (startPage !== 'home') showPage(startPage, false);
-})();
+}, true);
 
 function animSkills() {
   document.querySelectorAll('.skill-fill').forEach(bar => {
@@ -668,11 +681,14 @@ function animSkills() {
 }
 
 document.addEventListener('keydown', e => {
-  const pages = ['home', 'about', 'education', 'projects', 'skills', 'contact'];
-  const current = [...document.querySelectorAll('.page.active, .section-page.active')].map(el => el.id)[0];
-  const idx = pages.indexOf(current);
-  if (e.key === 'ArrowRight' && idx < pages.length - 1) showPage(pages[idx + 1]);
-  if (e.key === 'ArrowLeft' && idx > 0) showPage(pages[idx - 1]);
+  const currentPath = getCurrentPage();
+  const idx = PAGE_ORDER.indexOf(currentPath);
+  if (e.key === 'ArrowRight' && idx < PAGE_ORDER.length - 1 && idx !== -1) {
+    navigateTo(PAGE_ORDER[idx + 1]);
+  }
+  if (e.key === 'ArrowLeft' && idx > 0 && idx !== -1) {
+    navigateTo(PAGE_ORDER[idx - 1]);
+  }
 });
 
 function handleFormSubmit(event) {
@@ -729,9 +745,19 @@ function handleFormSubmit(event) {
 }
 
 window.addEventListener('load', () => {
-  setTimeout(() => {
+  // Mark session as started so subsequent page loads skip the loader
+  const isFirstLoad = !sessionStorage.getItem('hasLoadedBefore');
+  if (isFirstLoad) {
+    sessionStorage.setItem('hasLoadedBefore', '1');
+    // Show loader on first load and fade out after delay
+    setTimeout(() => {
+      document.body.classList.add('loaded');
+    }, 800);
+  } else {
+    // Skip loader instantly on subsequent navigation
     document.body.classList.add('loaded');
-  }, 800);
+  }
+  initActiveNavLink();
   updateFilterCounts();
 });
 
