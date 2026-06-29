@@ -50,6 +50,17 @@ const projectsData = {
     img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2000&auto=format&fit=crop',
     live: 'https://tech-event-web.vercel.app',
     github: 'https://github.com/OpticRish/Tech-Event-Web'
+  },
+  'techfest3d': {
+    title: 'TechFest 3D | Hyper-Space Nexus',
+    tag: 'Full Stack',
+    category: 'fullstack',
+    desc: 'An interactive, futuristic 3D website built using Three.js and GSAP (GreenSock). The concept revolves around a "Hyper-Space Nexus"—a digital corridor filled with floating crystalline polyhedrons, neon energy paths, and interactive digital dust.',
+    stack: ['Three.js', 'GSAP', 'HTML', 'CSS'],
+    img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2020&auto=format&fit=crop',
+    live: '#',
+    github: 'https://github.com/OpticRish/TechFest3D',
+    liveComingSoon: true
   }
 };
 
@@ -74,9 +85,15 @@ function openProjectModal(projectId) {
     githubLink.innerHTML = '<span>Coming Soon</span> <span class="text-lg">⌘</span>';
     githubLink.className = 'px-6 py-3 border border-white/10 text-white/40 rounded-full text-sm pointer-events-none flex items-center gap-2';
   } else {
-    liveLink.href = data.live;
-    liveLink.innerHTML = '<span>Visit Live Site</span> ↗';
-    liveLink.className = 'px-6 py-3 bg-lavender text-deep rounded-full text-sm font-semibold hover:bg-rose transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(201,184,240,0.3)] hover:scale-105';
+    if (data.liveComingSoon) {
+      liveLink.href = '#';
+      liveLink.innerHTML = '<span>Coming Soon</span> ✦';
+      liveLink.className = 'px-6 py-3 bg-white/5 border border-white/10 text-white/40 rounded-full text-sm font-semibold pointer-events-none flex items-center gap-2';
+    } else {
+      liveLink.href = data.live;
+      liveLink.innerHTML = '<span>Visit Live Site</span> ↗';
+      liveLink.className = 'px-6 py-3 bg-lavender text-deep rounded-full text-sm font-semibold hover:bg-rose transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(201,184,240,0.3)] hover:scale-105';
+    }
     
     githubLink.href = data.github;
     githubLink.innerHTML = '<span>GitHub Repo</span> <span class="text-lg">⌘</span>';
