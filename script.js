@@ -67,7 +67,7 @@ const projectsData = {
     tag: 'Full Stack | AI',
     category: 'fullstack ai',
     desc: 'A meticulously crafted digital portfolio designed to reflect my personal brand and creative vision. It features a sleek dark mode aesthetic, smooth micro-animations, and a highly interactive UI to present my projects and skills beautifully. The site serves as a complete digital identity, offering visitors a dynamic and premium browsing experience.',
-    stack: ['Vercel', 'Gemini AI', 'HTML', 'JavaScript'],
+    stack: ['HTML', 'Gemini API', 'TailWindCSS', 'JavaScript', 'Node', 'Pyhton'],
     img: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop',
     live: 'https://rishfolio15.vercel.app',
     github: 'https://github.com/OpticRish/RishFolio'
@@ -90,7 +90,7 @@ function openProjectModal(projectId) {
     liveLink.href = '#';
     liveLink.innerHTML = '<span>Coming Soon</span> ✦';
     liveLink.className = 'px-6 py-3 bg-white/5 border border-white/10 text-white/40 rounded-full text-sm font-semibold pointer-events-none flex items-center gap-2';
-    
+
     githubLink.href = '#';
     githubLink.innerHTML = '<span>Coming Soon</span> <span class="text-lg">⌘</span>';
     githubLink.className = 'px-6 py-3 border border-white/10 text-white/40 rounded-full text-sm pointer-events-none flex items-center gap-2';
@@ -104,7 +104,7 @@ function openProjectModal(projectId) {
       liveLink.innerHTML = '<span>Visit Live Site</span> ↗';
       liveLink.className = 'px-6 py-3 bg-lavender text-deep rounded-full text-sm font-semibold hover:bg-rose transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(201,184,240,0.3)] hover:scale-105';
     }
-    
+
     githubLink.href = data.github;
     githubLink.innerHTML = '<span>GitHub Repo</span> <span class="text-lg">⌘</span>';
     githubLink.className = 'px-6 py-3 border border-lavender/30 rounded-full text-sm text-textPrimary hover:border-lavender hover:bg-lavender/10 transition-all flex items-center gap-2 hover:scale-105';
@@ -234,7 +234,7 @@ function updateFilterCounts() {
     game: 0,
     cli: 0
   };
-  
+
   cards.forEach(card => {
     const cat = card.getAttribute('data-category');
     if (cat && cat in counts) {
@@ -255,27 +255,27 @@ function updateFilterCounts() {
 function openMobileFilter() {
   const drawer = document.getElementById('mobile-filter-drawer');
   const content = document.getElementById('mobile-filter-content');
-  
+
   // Update counts before opening
   updateFilterCounts();
 
   drawer.classList.remove('hidden');
   document.body.classList.add('modal-active'); // prevents body scroll
-  
+
   // Rotate chevron in trigger
   const chevron = document.querySelector('#mobile-filter-trigger .chevron');
   if (chevron) chevron.style.transform = 'translateY(-1px) rotate(180deg)';
 
   // Force reflow
   void drawer.offsetWidth;
-  
+
   drawer.classList.add('open');
 }
 
 // Close Mobile Filter
 function closeMobileFilter() {
   const drawer = document.getElementById('mobile-filter-drawer');
-  
+
   // Rotate chevron back
   const chevron = document.querySelector('#mobile-filter-trigger .chevron');
   if (chevron) chevron.style.transform = 'translateY(0) rotate(0deg)';
@@ -791,7 +791,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const rbotSend = document.getElementById('rbotSend');
   const rbotInput = document.getElementById('rbotInput');
   const rbotMessages = document.getElementById('rbotMessages');
-  
+
   const iconChat = document.querySelector('.rbot-icon-chat');
   const iconCross = document.querySelector('.rbot-icon-cross');
 
@@ -839,7 +839,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   rbotFab.addEventListener('click', toggleChat);
   if (rbotClose) rbotClose.addEventListener('click', toggleChat);
-  
+
   if (rbotClearChat) {
     rbotClearChat.addEventListener('click', () => {
       rbotMessages.innerHTML = initialGreeting;
@@ -849,7 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Auto-resize textarea
   if (rbotInput) {
-    rbotInput.addEventListener('input', function() {
+    rbotInput.addEventListener('input', function () {
       this.style.height = 'auto';
       this.style.height = (this.scrollHeight) + 'px';
     });
@@ -890,7 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
     appendMessage(text, 'user');
     rbotInput.value = '';
     rbotInput.style.height = 'auto'; // Reset height
-    
+
     showTyping();
 
     try {
