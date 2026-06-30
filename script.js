@@ -853,7 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (rbotInputArea) rbotInputArea.classList.remove('hidden');
       if (rbotEndedArea) rbotEndedArea.classList.add('hidden');
       if (rbotEndChat) rbotEndChat.classList.remove('hidden');
-      if (rbotClearChat) rbotClearChat.classList.add('hidden');
+      if (rbotClearChat) rbotClearChat.classList.remove('hidden');
     }
   }
 
@@ -906,7 +906,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (rbotInputArea) rbotInputArea.classList.remove('hidden');
     if (rbotEndedArea) rbotEndedArea.classList.add('hidden');
     if (rbotEndChat) rbotEndChat.classList.remove('hidden');
-    if (rbotClearChat) rbotClearChat.classList.add('hidden');
+    if (rbotClearChat) rbotClearChat.classList.remove('hidden');
     saveHistory();
     if (rbotInput) {
       rbotInput.value = '';
