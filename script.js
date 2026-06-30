@@ -792,10 +792,44 @@ document.addEventListener('DOMContentLoaded', () => {
   const rbotInput = document.getElementById('rbotInput');
   const rbotMessages = document.getElementById('rbotMessages');
 
+  // Find container elements in clean HTML
+  const headerActions = document.querySelector('.rbot-header-actions');
+  const rbotInputArea = document.querySelector('.rbot-input-area');
+
   const iconChat = document.querySelector('.rbot-icon-chat');
   const iconCross = document.querySelector('.rbot-icon-cross');
 
   if (!rbotFab || !rbotWindow) return;
+
+  // 1. Create and insert End Chat button dynamically
+  const rbotEndChat = document.createElement('button');
+  rbotEndChat.id = 'rbotEndChat';
+  rbotEndChat.className = 'rbot-end';
+  rbotEndChat.title = 'End Chat';
+  rbotEndChat.setAttribute('aria-label', 'End Chat');
+  rbotEndChat.style.cssText = 'display: flex; align-items: center; gap: 4px; font-size: 11px; font-family: "DM Sans", sans-serif;';
+  rbotEndChat.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+    End
+  `;
+  if (headerActions && rbotClose) {
+    headerActions.insertBefore(rbotEndChat, rbotClose);
+  }
+
+  // 2. Create and insert Ended Area dynamically
+  const rbotEndedArea = document.createElement('div');
+  rbotEndedArea.id = 'rbotEndedArea';
+  rbotEndedArea.className = 'rbot-ended-area hidden';
+  rbotEndedArea.style.cssText = 'display: flex; align-items: center; justify-content: center; padding: 15px; border-top: 1px solid var(--border); background: rgba(45, 31, 69, 0.4);';
+  rbotEndedArea.innerHTML = `
+    <button class="btn-primary" id="rbotNewChat" style="padding: 10px 20px; font-size: 13px; border-radius: 20px; width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21v-5h5"></path></svg>
+      Start New Chat
+    </button>
+  `;
+  rbotWindow.appendChild(rbotEndedArea);
+
+  const rbotNewChat = document.getElementById('rbotNewChat');
 
   // Initial greeting HTML to restore when clearing chat
   const initialGreeting = `<div class="rbot-message bot"><div class="rbot-bubble">Hi! I'm RBOT, Rishabh's AI assistant. Ask me anything about his skills, projects, or background!</div></div>`;
@@ -806,6 +840,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (history) {
       rbotMessages.innerHTML = history;
       rbotMessages.scrollTop = rbotMessages.scrollHeight;
+    }
+    
+    // Apply ended/active UI state
+    const isEnded = sessionStorage.getItem('rbotChatEnded') === 'true';
+    if (isEnded) {
+      if (rbotInputArea) rbotInputArea.classList.add('hidden');
+      if (rbotEndedArea) rbotEndedArea.classList.remove('hidden');
+      if (rbotEndChat) rbotEndChat.classList.add('hidden');
+      if (rbotClearChat) rbotClearChat.classList.remove('hidden');
+    } else {
+      if (rbotInputArea) rbotInputArea.classList.remove('hidden');
+      if (rbotEndedArea) rbotEndedArea.classList.add('hidden');
+      if (rbotEndChat) rbotEndChat.classList.remove('hidden');
+      if (rbotClearChat) rbotClearChat.classList.add('hidden');
     }
   }
 
@@ -828,7 +876,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function toggleChat() {
     rbotWindow.classList.toggle('hidden');
     if (!rbotWindow.classList.contains('hidden')) {
-      rbotInput.focus();
+      const isEnded = sessionStorage.getItem('rbotChatEnded') === 'true';
+      if (!isEnded && rbotInput) {
+        rbotInput.focus();
+      }
       if (iconChat) iconChat.classList.add('hidden');
       if (iconCross) iconCross.classList.remove('hidden');
     } else {
@@ -840,11 +891,40 @@ document.addEventListener('DOMContentLoaded', () => {
   rbotFab.addEventListener('click', toggleChat);
   if (rbotClose) rbotClose.addEventListener('click', toggleChat);
 
+  function endChat() {
+    sessionStorage.setItem('rbotChatEnded', 'true');
+    appendMessage("Chat ended. Click 'Start New Chat' to begin a new conversation.", 'bot');
+    if (rbotInputArea) rbotInputArea.classList.add('hidden');
+    if (rbotEndedArea) rbotEndedArea.classList.remove('hidden');
+    if (rbotEndChat) rbotEndChat.classList.add('hidden');
+    if (rbotClearChat) rbotClearChat.classList.remove('hidden');
+  }
+
+  function startNewChat() {
+    sessionStorage.removeItem('rbotChatEnded');
+    rbotMessages.innerHTML = initialGreeting;
+    if (rbotInputArea) rbotInputArea.classList.remove('hidden');
+    if (rbotEndedArea) rbotEndedArea.classList.add('hidden');
+    if (rbotEndChat) rbotEndChat.classList.remove('hidden');
+    if (rbotClearChat) rbotClearChat.classList.add('hidden');
+    saveHistory();
+    if (rbotInput) {
+      rbotInput.value = '';
+      rbotInput.style.height = 'auto';
+      rbotInput.focus();
+    }
+  }
+
+  if (rbotEndChat) {
+    rbotEndChat.addEventListener('click', endChat);
+  }
+
+  if (rbotNewChat) {
+    rbotNewChat.addEventListener('click', startNewChat);
+  }
+
   if (rbotClearChat) {
-    rbotClearChat.addEventListener('click', () => {
-      rbotMessages.innerHTML = initialGreeting;
-      saveHistory();
-    });
+    rbotClearChat.addEventListener('click', startNewChat);
   }
 
   // Auto-resize textarea
@@ -884,6 +964,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function sendMessage() {
+    const isEnded = sessionStorage.getItem('rbotChatEnded') === 'true';
+    if (isEnded) return;
+
     const text = rbotInput.value.trim();
     if (!text) return;
 

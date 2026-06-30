@@ -2224,6 +2224,7 @@ body.modal-active {
 }
 
 .rbot-clear,
+.rbot-end,
 .rbot-close {
   background: none;
   border: none;
@@ -2237,6 +2238,7 @@ body.modal-active {
 }
 
 .rbot-clear:hover,
+.rbot-end:hover,
 .rbot-close:hover {
   color: var(--rose);
 }
