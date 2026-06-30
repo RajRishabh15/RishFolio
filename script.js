@@ -771,3 +771,150 @@ window.addEventListener('scroll', () => {
     progressBar.style.width = scrolled + '%';
   }
 });
+
+// ===== RBOT CHATBOT LOGIC =====
+document.addEventListener('DOMContentLoaded', () => {
+  const rbotFab = document.getElementById('rbotFab');
+  const rbotWindow = document.getElementById('rbotWindow');
+  const rbotClose = document.getElementById('rbotClose');
+  const rbotClearChat = document.getElementById('rbotClearChat');
+  const rbotSend = document.getElementById('rbotSend');
+  const rbotInput = document.getElementById('rbotInput');
+  const rbotMessages = document.getElementById('rbotMessages');
+  
+  const iconChat = document.querySelector('.rbot-icon-chat');
+  const iconCross = document.querySelector('.rbot-icon-cross');
+
+  if (!rbotFab || !rbotWindow) return;
+
+  // Initial greeting HTML to restore when clearing chat
+  const initialGreeting = `<div class="rbot-message bot"><div class="rbot-bubble">Hi! I'm RBOT, Rishabh's AI assistant. Ask me anything about his skills, projects, or background!</div></div>`;
+
+  // Load chat history from sessionStorage
+  function loadHistory() {
+    const history = sessionStorage.getItem('rbotHistory');
+    if (history) {
+      rbotMessages.innerHTML = history;
+      rbotMessages.scrollTop = rbotMessages.scrollHeight;
+    }
+  }
+
+  // Save chat history to sessionStorage
+  function saveHistory() {
+    // Don't save the typing indicator
+    const typingIndicator = rbotMessages.querySelector('.rbot-typing-indicator');
+    if (typingIndicator) {
+      const clone = rbotMessages.cloneNode(true);
+      const typingInClone = clone.querySelector('.rbot-typing-indicator');
+      if (typingInClone) typingInClone.remove();
+      sessionStorage.setItem('rbotHistory', clone.innerHTML);
+    } else {
+      sessionStorage.setItem('rbotHistory', rbotMessages.innerHTML);
+    }
+  }
+
+  loadHistory();
+
+  function toggleChat() {
+    rbotWindow.classList.toggle('hidden');
+    if (!rbotWindow.classList.contains('hidden')) {
+      rbotInput.focus();
+      if (iconChat) iconChat.classList.add('hidden');
+      if (iconCross) iconCross.classList.remove('hidden');
+    } else {
+      if (iconChat) iconChat.classList.remove('hidden');
+      if (iconCross) iconCross.classList.add('hidden');
+    }
+  }
+
+  rbotFab.addEventListener('click', toggleChat);
+  if (rbotClose) rbotClose.addEventListener('click', toggleChat);
+  
+  if (rbotClearChat) {
+    rbotClearChat.addEventListener('click', () => {
+      rbotMessages.innerHTML = initialGreeting;
+      saveHistory();
+    });
+  }
+
+  // Auto-resize textarea
+  if (rbotInput) {
+    rbotInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+  }
+
+  function appendMessage(text, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `rbot-message ${sender}`;
+    // Basic formatting for bold text and line breaks in markdown
+    const formattedText = text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+    msgDiv.innerHTML = `<div class="rbot-bubble">${formattedText}</div>`;
+    rbotMessages.appendChild(msgDiv);
+    rbotMessages.scrollTop = rbotMessages.scrollHeight;
+    saveHistory();
+  }
+
+  function showTyping() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = `rbot-message bot rbot-typing-indicator`;
+    typingDiv.innerHTML = `<div class="rbot-bubble rbot-typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+    rbotMessages.appendChild(typingDiv);
+    rbotMessages.scrollTop = rbotMessages.scrollHeight;
+  }
+
+  function removeTyping() {
+    const typingIndicator = rbotMessages.querySelector('.rbot-typing-indicator');
+    if (typingIndicator) {
+      typingIndicator.remove();
+    }
+  }
+
+  async function sendMessage() {
+    const text = rbotInput.value.trim();
+    if (!text) return;
+
+    appendMessage(text, 'user');
+    rbotInput.value = '';
+    rbotInput.style.height = 'auto'; // Reset height
+    
+    showTyping();
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: text })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      removeTyping();
+      appendMessage(data.reply || 'Sorry, I am having trouble answering right now.', 'bot');
+    } catch (error) {
+      console.error('Error in RBOT:', error);
+      removeTyping();
+      appendMessage('Oops! I encountered an error connecting to my brain. Please try again later.', 'bot');
+    }
+  }
+
+  if (rbotSend) rbotSend.addEventListener('click', sendMessage);
+  if (rbotInput) {
+    rbotInput.addEventListener('keydown', (e) => {
+      // Submit on Enter (without Shift)
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  }
+});
+

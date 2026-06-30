@@ -120,6 +120,45 @@
     <div class="copyright">&copy; 2026 Rishabh Raj.<br>All rights reserved.</div>
   </div>
 
+  <!-- ===== RBOT Chatbot Widget ===== -->
+  <div class="rbot-widget-container" id="rbotWidgetContainer">
+    <div class="rbot-window hidden" id="rbotWindow">
+      <div class="rbot-header">
+        <div class="rbot-header-info">
+          <div class="rbot-avatar">R</div>
+          <div>
+            <h3 class="rbot-title">RBOT</h3>
+            <span class="rbot-status">Online</span>
+          </div>
+        </div>
+        <div class="rbot-header-actions">
+          <button class="rbot-clear" id="rbotClearChat" title="Clear Chat" aria-label="Clear Chat" style="display: flex; align-items: center; gap: 4px; font-size: 11px; font-family: 'DM Sans', sans-serif;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            Clear
+          </button>
+          <button class="rbot-close" id="rbotClose" aria-label="Close Chat">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+      <div class="rbot-messages" id="rbotMessages">
+        <div class="rbot-message bot">
+          <div class="rbot-bubble">Hi! I'm RBOT, Rishabh's AI assistant. Ask me anything about his skills, projects, or background!</div>
+        </div>
+      </div>
+      <div class="rbot-input-area">
+        <textarea id="rbotInput" placeholder="Ask me anything..." rows="1"></textarea>
+        <button id="rbotSend" aria-label="Send Message">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+    </div>
+    <button class="rbot-fab" id="rbotFab" aria-label="Toggle Chat">
+      <svg class="rbot-icon-chat" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <svg class="rbot-icon-cross hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+
   <script src="script.js"></script>
 </body>
 
